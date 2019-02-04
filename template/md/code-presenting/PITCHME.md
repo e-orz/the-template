@@ -23,7 +23,6 @@ Code presenting repository source file template.
 
 
 +++?color=lavender
-@title[Fenced Code Block]
 
 ```scala
 class TestESSuiteDemo extends FlatSpec with ForAllTestContainer {
@@ -54,11 +53,6 @@ class TestESSuiteDemo extends FlatSpec with ForAllTestContainer {
 @[1,2](You can present code inlined within your slide markdown too.)
 @[9-17](Your code is displayed using code-syntax highlighting just like your IDE.)
 @[19-20](Again, all of this without ever leaving your slideshow.)
-
-@snap[north-east template-note text-gray]
-Code presenting fenced code block template.
-@snapend
-
 
 +++?gist=onetapbeyond/494e0fecaf0d6a2aa2acadfb8eb9d6e8&lang=scala&color=black
 @title[GitHub GIST]
