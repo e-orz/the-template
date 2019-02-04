@@ -25,27 +25,30 @@ Code presenting repository source file template.
 +++?color=lavender
 @title[Fenced Code Block]
 
-```javascript
-// Include http module.
-var http = require("http");
+```scala
+class TestESSuiteDemo extends FlatSpec with ForAllTestContainer {
+  val elasticsearchVersion: String = "6.5.4"
 
-// Create the server. Function passed as parameter
-// is called on every request made.
-http.createServer(function (request, response) {
-  // Attach listener on end event.  This event is
-  // called when client sent, awaiting response.
-  request.on("end", function () {
-    // Write headers to the response.
-    // HTTP 200 status, Content-Type text/plain.
-    response.writeHead(200, {
-      'Content-Type': 'text/plain'
-    });
-    // Send data and end response.
-    response.end('Hello HTTP!');
-  });
+  override val container = {
+    val scalaContainer = GenericContainer(s"docker.elastic.co/elasticsearch/elasticsearch-oss:$elasticsearchVersion",
+      exposedPorts = Seq(9200),
+      waitStrategy = Wait.forHttp("/").forPort(9200).forStatusCode(200),
+      env = Map("discovery.type" -> "single-node", "ES_JAVA_OPTS" -> "-Xms2000m -Xmx2000m")
+    )
+    scalaContainer.configure { container =>
+      val logger = new Slf4jLogConsumer(LoggerFactory.getLogger(s"elasticsearch-oss:$elasticsearchVersion"))
+      container.withLogConsumer(logger)
+    }
+    scalaContainer
+  }
 
-// Listen on the 8080 port.
-}).listen(8080);
+  "TestEsSuiteDemo" should "work" in {
+    val output = scala.io.Source.fromURL(s"http://${container.containerIpAddress}:${container.mappedPort(9200)}").mkString
+    print(s"The output:\n$output\n")
+    assert(true)
+  }
+
+}
 ```
 
 @[1,2](You can present code inlined within your slide markdown too.)
